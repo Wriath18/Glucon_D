@@ -1,14 +1,19 @@
-from langchain import PromptTemplate, LLMChain
+from langchain_community.llms import HuggingFaceEndpoint
+from langchain.chains import LLMChain
+from langchain.prompts import PromptTemplate
 import chainlit as cl
-from langchain import HuggingFaceHub
-
+import os
 repo_id = "tiiuae/falcon-7b-instruct"
-# Create the HuggingFaceHub object
-llm = HuggingFaceHub(
-huggingfacehub_api_token='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',
-repo_id=repo_id,
-model_kwargs={"temperature":0.3, "max_new_tokens":1024}
+
+from config import HUGGINGFACEHUB_API_TOKEN
+
+# Set the token as an environment variable
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = HUGGINGFACEHUB_API_TOKEN
+
+llm = HuggingFaceEndpoint(
+    repo_id=repo_id, max_length=128, temperature=0.5, token=HUGGINGFACEHUB_API_TOKEN
 )
+
 
 template = """ Task: write a specific answer to question related to exercise,workout, health and fitness only, giving reference to exercises.
 Topic: Health, fitness, exercise and workout
@@ -20,6 +25,7 @@ Format: Text
 Here's the question. {question}
 """
 
+
 @cl.on_chat_start
 def main():
     # Instantiate the chain for that user session
@@ -29,6 +35,7 @@ def main():
     # Store the chain in the user session
     cl.user_session.set("llm_chain", llm_chain)
 
+
 @cl.on_message
 async def main(message: cl.Message):
     # Retrieve the chain from the user session
@@ -36,5 +43,4 @@ async def main(message: cl.Message):
 
     # Call the chain asynchronously
     res = await llm_chain.acall(message.content, callbacks=[cl.AsyncLangchainCallbackHandler()])
-
-    await cl.Message(content=res['text']).send()
+    await cl.Message(content=res["text"]).send()
