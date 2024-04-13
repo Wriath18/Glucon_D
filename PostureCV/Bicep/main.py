@@ -12,7 +12,7 @@ def calc_angle(a,b,c): # 3D points
         Returns:
         theta : Angle in degress between the lines joined by coordinates (a,b) and (b,c)
     '''
-    a = np.array([a.x, a.y])#, a.z])    # Reduce 3D point to 2D
+    a = np.array([a.x, a.y])#, a.z])     # Reduce 3D point to 2D
     b = np.array([b.x, b.y])#, b.z])    # Reduce 3D point to 2D
     c = np.array([c.x, c.y])#, c.z])    # Reduce 3D point to 2D
 
