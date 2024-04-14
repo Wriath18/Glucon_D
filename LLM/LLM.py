@@ -3,7 +3,7 @@ from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
 import chainlit as cl
 import os
-repo_id = "tiiuae/falcon-7b-instruct"
+repo_id = "mistralai/Mistral-7B-Instruct-v0.2"
 
 from config import HUGGINGFACEHUB_API_TOKEN
 
